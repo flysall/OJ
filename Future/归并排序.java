@@ -24,7 +24,7 @@ class MergeSort {
             numsResult[k++] = nums[j++];
         j--; k--;
         while(k >= 0)
-        	nums[j--] = numsResult[k--];
+            nums[j--] = numsResult[k--];
     }
 }
 
