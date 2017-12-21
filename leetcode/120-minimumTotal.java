@@ -1,11 +1,10 @@
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
-        int sum = 0;
-        for(int i = 0; i < triangle.size();  i++){
-            Object[] temp =  triangle.get(i).toArray();
-            Arrays.sort(temp);
-            sum += (Integer) temp[0];
+        int[] nums = new int[triangle.size()+1];
+        for(int i = triangle.size()-1; i >= 0; i--){
+            for(int j = 0; j < triangle.get(i).size(); j++)
+                nums[j] = Math.min(nums[j], nums[j+1]) + triangle.get(i).get(j);
         }
-        return sum;
+        return nums[0];
     }
 }
