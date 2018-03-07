@@ -1,6 +1,6 @@
  class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
-        List<List<Integer>> list = new ArrayList();
+        List<List<Integer>> list = new ArrayList<>();
         Arrays.sort(nums);
         for (int i = 0; i < nums.length - 3; i++) {
             if (i > 0 && nums[i - 1] == nums[i])
