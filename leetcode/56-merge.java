@@ -16,7 +16,7 @@ class Solution {
         }
         Arrays.sort(starts);
         Arrays.sort(ends);
-        List<Interval> list = new ArrayList();
+        List<Interval> list = new ArrayList<>();
         for(int i = 0, j = 0; i < len; i++){
             if(i == len-1 || starts[i+1] > ends[i]){
                 list.add(new Interval(starts[j], ends[i]));

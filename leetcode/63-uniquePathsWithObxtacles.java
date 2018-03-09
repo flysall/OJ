@@ -1,31 +1,27 @@
 class Solution {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        if(obstacleGrid[0][0] == 1) return 0;
-        for(int i = 1; i < obstacleGrid[0].length; i++){
-            if(obstacleGrid[0][i] == 0) obstacleGrid[0][i] = 1;
-            else{
-                while(i < obstacleGrid[0].length)
-                    obstacleGrid[0][i++] = 0;
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[][] matrix = new int[m][n];
+        if(obstacleGrid[0][0] == 1)
+            return 0;
+        matrix[0][0] = 1;
+        for(int i = 1; i < matrix[0].length; i++) {
+            if(obstacleGrid[0][i] == 1)
                 break;
-            }
+            matrix[0][i] = 1;
         }
-        for(int i = 1; i < obstacleGrid.length; i++){
-            if(obstacleGrid[i][0] == 0) obstacleGrid[i][0] = 1;
-            else{
-                while(i < obstacleGrid.length)
-                    obstacleGrid[i++][0] = 0;
+        for(int i = 1; i < matrix.length; i++) {
+            if(obstacleGrid[i][0] == 1)
                 break;
-            }
+            matrix[i][0] = 1;
         }
-        obstacleGrid[0][0] = 1;
-        for(int i = 1; i < obstacleGrid.length; i++){
-            for(int j = 1; j < obstacleGrid[0].length; j++){
+        for(int i = 1; i < matrix.length; i++) {
+            for(int j = 1; j < matrix[0].length; j++) {
                 if(obstacleGrid[i][j] == 1)
-                    obstacleGrid[i][j] = 0;
-                else
-                    obstacleGrid[i][j] = obstacleGrid[i-1][j] + obstacleGrid[i][j-1];
+                    continue;
+                matrix[i][j] = matrix[i-1][j] + matrix[i][j-1];
             }
         }
-        return obstacleGrid[obstacleGrid.length-1][obstacleGrid[0].length-1];
+        return matrix[m-1][n-1];
     }
 }
