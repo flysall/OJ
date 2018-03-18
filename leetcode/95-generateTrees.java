@@ -12,7 +12,7 @@ class Solution {
         return getTrees(1, n);
     }
     private List<TreeNode> getTrees(int start, int end){
-        List<TreeNode> list = new ArrayList();
+        List<TreeNode> list = new ArrayList<>();
         if(start > end)
             list.add(null);
         if(start == end)
