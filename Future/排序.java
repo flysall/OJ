@@ -83,6 +83,42 @@ public class Sort {
             nums[j--] = numsResult[k--];
     }
 
+    /**
+     * 堆排序
+     */
+    static int lenForHeapSort;
+    public static void HeadpSort(int[] array) {
+        lenForHeapSort = array.length;
+        if(lenForHeapSort < 1) 
+            return;
+        buildMaxHeap(array);
+        while(lenForHeapSort > 0) {
+            swap(array, 0, lenForHeapSort-1);
+            lenForHeapSort--;
+            adjustHeap(array, 0);
+        }
+    }
+    
+    private static void buildMaxHeap(int[] array) {
+        for(int i = (lenForHeapSort-1) / 2; i >= 0; i--) {
+            adjustHeap(array, i);
+        }
+    }
+
+    private static void adjustHeap(int[] array, int i) {
+        int maxIndex = i;
+        // 有左子树，且左子树大于maxIndex节点
+        if(i * 2 + 1 < len && array[i * 2 + 1] > array[maxIndex])
+            maxIndex = i * 2 + 1;
+        // 有右子树，且右子树大于maxIndex节点
+        if(i * 2 + 2< len && array[i * 2 + 2] > array[maxIndex])
+            maxIndex = i * 2 + 2;        
+        if(maxIndex != i) {
+            swap(array, maxIndex, i);
+            adjustHeap(array, maxIndex);
+        }
+    }
+
 
     /**
      * 希尔排序
@@ -122,6 +158,7 @@ public class Sort {
         }
     }
 
+
     /**
      * 选择排序
      */
@@ -138,5 +175,97 @@ public class Sort {
             array[minIndex] = array[i];
             array[i] = temp;
         }   
+    }
+
+
+    /**
+     * 计数排序
+     */
+    public static void countingSort(int[] array) {
+        if(array.length == 0) 
+            return;
+        int bias, min = array[0], max = array[0];
+        for(int i = 1; i < array.length; i++) {
+            if(array[i] > max) 
+                max = array[i];
+            if(array[i] < min) 
+                min = array[i];
+        }
+        bias = 0 - min;
+        int[] bucket = new int[max - min + 1];
+        for(int i = 0; i < array.length; i++) 
+            bucket[array[i] + bias]++;
+        int index = 0, i = 0;
+        while(index < array.length) {
+            if(bucket[i] != 0) {
+                array[index++] = i - bias;
+                bucket[i]--;
+            } else {    
+                i++;
+            }
+        }
+    }
+
+
+    /**
+     * 桶排序
+     */
+    public static ArrayList<Integer> bucketSort(ArrayList<Integer> array, int bucketSize) {
+        if(array == null || array.size() < 2)
+            return arrray;
+        int max = array.get(0), min = array.get(0);
+        for(int i = 0; i < array.size(); i++) {
+            if(array.get(i) > max) 
+                max = array.get(i);
+            if(array.get(i) < min) 
+                min = array.get(i);
+        }
+        int bucketCount = (max - min) / bucketSize + 1;
+        ArrayList<ArrayList<Integer>> bucketArr = new ArrayList<>(bucketCount);
+        ArrayList<Integer> resultArr = new ArrayList<>();
+        for(int i = 0; i < bucketCount; i++) 
+            bucketArr.add(new ArrayList<Integer>());
+        for(int i = 0; i < array.size(); i++) 
+            bucketArr.get((array.get(i) - min) / bucketSize).add(array.get(i));
+        for(int i = 0; i < bucketCount; i++) {
+            if(bucketCount == 1)
+                bucketSize--;
+            ArrayList<Integer> temp = bucketSort(bucketArr.get(i), bucketSize);
+            for(int j = 0; j < temp.size(); j++)
+                resultArr.add(temp.get(j));
+        }
+        return resultArr;
+    }
+
+    /**
+     * 基数排序
+     */
+    public static void radixSort(int[] array) {
+        if(array == null || array.length < 2)
+            return;
+        int max = array[0];
+        for(int i = 1; i < array.length; i++)
+            max = Math.max(max, array[i]);
+        int maxDigit = 0;
+        while(max != 0) {
+            max /= 10;
+            maxDigit++;
+        }
+        int mod = 10, div = 1;
+        List<List<Integer>> bucketList = new ArrayList<>();
+        for(int i = 0; i < 10; i++) 
+            bucketList.add(new ArrayList<Integer>());
+        for(int i = 0; i < maxDigit; i++, mod *= 10, div *= 10) {
+            for(int j = 0; j < array.length; j++) {
+                int num = (array[j] % mod) / div;
+                bucketList.get(num).add(array[j]);
+            }
+            int index = 0;
+            for(int j = 0; j < bucketList.size(); j++) {
+                for(int k = 0; k < bucketList.get(j).size(); k++) 
+                    array[index++] = bucketList.get(j).get(k);
+                bucketList.get(j).clear();
+            }
+        }
     }
 }
