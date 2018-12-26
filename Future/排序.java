@@ -1,8 +1,10 @@
+import java.util.Random;
+
 public class Sort {
+    static Random rand = new Random();  // The Random is without seed, or it will be pseudo-random.
     /**
      * 快速排序
      */
-    static Random rand = new Random();
     public static void quickSort(int[] nums) {
         quickSort(nums, 0, nums.length-1);
     }
@@ -16,15 +18,17 @@ public class Sort {
     }
 
     private static int partition(int[] nums, int low, int high) {
-        int i = low, j = low-1;
+        int j = low-1;
         swap(nums, high, low+rand.nextInt(high-low+1)); // Make sure pivot is random.
-        for(; i < high; i++) {
+        for(int i = low; i < high; i++) {
             if(nums[i] <= nums[high]) {     // nums[high] is the pivot.
                 swap(nums, i, ++j);
             }
         }
         swap(nums, ++j, high);
-        return j;
+        // Now the pivot is moved from high to j, elements that are in the left of pivot are less than pivot 
+        // and elements that are in the right of pivot are bigger than pivot.
+        return j;   
     }
 
     private static void swap(int[] nums, int i, int j) {
@@ -54,16 +58,16 @@ public class Sort {
     /**
      * 归并排序
      */
-    public static void MergeSort(int[] nums, int left, int right){
+    public static void mergeSort(int[] nums, int left, int right){
         if(left < right){
             int mid = (left + right) / 2;
-            MergeSort(nums, left, mid);
-            MergeSort(nums, mid+1, right);
-            Merge(nums, left, mid, right);
+            mergeSort(nums, left, mid);
+            mergeSort(nums, mid+1, right);
+            merge(nums, left, mid, right);
         }
     }
 
-    private static void Merge(int[] nums, int left, int mid, int right){
+    private static void merge(int[] nums, int left, int mid, int right){
         int i = left, j = mid + 1, k = 0;
         int[] numsResult = new int[right - left + 1];
         while(i <= mid && j <= right){
@@ -76,7 +80,7 @@ public class Sort {
         }
         while(i <= mid)
             numsResult[k++] = nums[i++]; 
-        while( j <= right)
+        while(j <= right)
             numsResult[k++] = nums[j++];
         j--; k--;
         while(k >= 0)
@@ -86,21 +90,21 @@ public class Sort {
     /**
      * 堆排序
      */
-    static int lenForHeapSort;
-    public static void HeadpSort(int[] array) {
-        lenForHeapSort = array.length;
-        if(lenForHeapSort < 1) 
+    static int sizeOfHeap;
+    public static void heapSort(int[] array) {
+        sizeOfHeap = array.length;
+        if(sizeOfHeap < 1) 
             return;
         buildMaxHeap(array);
-        while(lenForHeapSort > 0) {
-            swap(array, 0, lenForHeapSort-1);
-            lenForHeapSort--;
+        while(sizeOfHeap > 0) {
+            swap(array, 0, sizeOfHeap-1);
+            sizeOfHeap--;
             adjustHeap(array, 0);
         }
     }
     
     private static void buildMaxHeap(int[] array) {
-        for(int i = (lenForHeapSort-1) / 2; i >= 0; i--) {
+        for(int i = (sizeOfHeap-1) / 2; i >= 0; i--) {
             adjustHeap(array, i);
         }
     }

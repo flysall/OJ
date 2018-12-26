@@ -1,27 +1,35 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int[] range = {nums.length, -1};
-        searchRange(nums, target, 0, nums.length-1, range);
-        if(range[0] > range[1])
-            range[0] = -1;
-        return range;
+        int[] res = new int[2];
+        res[0] = getIndex(nums, target, true);
+        res[1] = getIndex(nums, target, false);
+        return res;
     }
-    public void searchRange(int[] A, int target, int left, int right, int[] range) {
-        if(left > right) return;
-        int mid = left + (right - left) / 2;
-        if(A[mid] == target) {
-            if(mid < range[0]) {
-                range[0] = mid;
-                searchRange(A, target, left, mid-1, range);
+
+    private int getIndex(int[] nums, int target, boolean isLeft) {
+        int left = 0, right = nums.length-1;
+        while(left <= right) {
+            int mid = left + ((right - left) >> 1);
+            if(target < nums[mid]) {
+                right = mid - 1;
+            } else if(target > nums[mid]) {
+                left = mid + 1;
+            } else {
+                if(isLeft) {
+                    if(mid > 0 && target == nums[mid - 1]) {
+                        right = mid - 1;
+                    } else {
+                        return mid;
+                    }
+                } else {
+                    if(mid < nums.length-1 && target == nums[mid + 1]) {
+                        left = mid + 1;
+                    } else {
+                        return mid;
+                    }
+                }
             }
-            if(mid > range[1]) {
-                range[1] = mid;
-                searchRange(A, target, mid+1, right, range);
-            }
-        } else if(A[mid] < target) {
-            searchRange(A, target, mid+1, right, range);
-        } else {
-            searchRange(A, target, left, mid-1, range);
         }
+        return -1;
     }
 }
