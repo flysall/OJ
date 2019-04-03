@@ -1,4 +1,5 @@
-/* Defition for a binary tree node.
+/**
+ * Definition for a binary tree node.
  * public class TreeNode {
  *     int val;
  *     TreeNode left;
@@ -11,21 +12,26 @@ class Solution {
         return n <= 0 ? new ArrayList<TreeNode>() : generateBst(1, n);
     }
     private List<TreeNode> generateBst(int left, int right) {
-        List<TreeNode> nodes = new ArrayList<>();
-        if (left > right)
-            nodes.add(null);
-        for (int i = left; i <= right; ++i) {
-            List<TreeNode> leftNodes = generateBst(left, i-1);
-            List<TreeNode> rightNodes = generateBst(i+1, right);
-            for (TreeNode leftNode : leftNodes) {
-                for (TreeNode rightNode : rightNodes) {
-                    TreeNode root = new TreeNode(i);
-                    root.left = leftNode;
-                    root.right = rightNode;
-                    nodes.add(root);
+        List<TreeNode> trees = new ArrayList<>();
+        if (left > right) {
+            trees.add(null);
+        } else if (left == right) {
+            TreeNode root = new TreeNode(left);
+            trees.add(root);
+        } else if (left < right) {
+            for (int i = left; i <= right; i++) {
+                List<TreeNode> leftTrees = generateBst(left, i-1);
+                List<TreeNode> rightTrees = generateBst(i+1, right);
+                for (TreeNode leftTree : leftTrees) {
+                    for (TreeNode rightTree : rightTrees) {
+                        TreeNode curRoot = new TreeNode(i);
+                        curRoot.left = leftTree;
+                        curRoot.right = rightTree;
+                        trees.add(curRoot);
+                    }
                 }
             }
         }
-        return nodes;
+        return trees;
     }
 }
